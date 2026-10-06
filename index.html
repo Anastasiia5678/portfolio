@@ -1,0 +1,136 @@
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="портфолио.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="info block">
+            <h1>Привет! Я Анастасия.</h1>
+            <h2>Верстаю лендинги и визитки на HTML/CSS, адаптирую под телефон и могу добавить интерактивную 3D-модель из Blender.</h2>
+        </div>
+    </div>
+
+    <div class="container4">
+        <div class="info1 block">
+                <h2>Сейчас набираю первые проекты в портфолио, поэтому возьму 3 заказа со скидкой.</h2>
+                <h3>Что делаю:</h3>
+                <ul>
+                    <li>одностраничный сайт (визитка, лендинг, страница услуг);</li>
+                    <li>адаптив под телефон;</li>
+                    <li>добавление 3D-модели на сайт;</li>
+                    <li>срок: до 7 дней.</li>
+                </ul>
+        </div>
+    </div>
+
+
+    <div class="container2">
+        
+        <div class="info2 block"> 
+
+            <ul>
+                <h3>Что нужно от вас:</h3>
+                <li>тексты и фото для сайта;</li>
+                <li>честный отзыв после работы;</li>
+                <li>разрешение показать сайт в моём портфолио.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container2">
+        <div class="info3 block">
+            <ul>
+                <h3>Прайс:</h3>
+                <li>Сайт на HTML/CSS&nbsp;&nbsp;&nbsp;&nbsp;<strong><s>от 15 000 ₽</s> &nbsp;от 8 000 ₽</strong></li>
+                <li>Добавлю 3D-модель на сайт&nbsp;&nbsp;&nbsp;&nbsp;<strong><s>от 6 000 ₽</s>&nbsp;от 5 000 ₽</strong></li> 
+            </ul>
+        </div>
+        <canvas id="bg"></canvas>
+
+        <model-viewer src="Untitled.glb" alt="3D-модель" orientation="0deg 0deg -90deg"
+            camera-orbit="0deg 75deg 150%"
+            camera-controls
+            shadow-intensity="1">
+        </model-viewer>
+
+
+
+    </div>
+
+    <div class="contact">
+            <a href="https://t.me/A_n_a_s_u_t_a_s_i_a" class="btn" data-direction="forward">Связаться в telegram →</a>
+    </div>
+<script>
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+</script>
+
+<script>
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    const total = 100;
+    const isMobile = innerWidth < 800;
+    const usable = isMobile ? 75 : total;   
+    const imgs = [];
+
+
+    for (let i = 1; i <= usable; i++) {
+    const img = new Image();
+    img.src = `frames/${String(i).padStart(4, '0')}.webp`;
+    imgs.push(img);
+    }
+
+    function draw(i) {
+    const img = imgs[i];
+    if (!img.complete) return;
+    const s = Math.max(canvas.width / img.width, canvas.height / img.height);
+    ctx.drawImage(img,
+        (canvas.width - img.width * s) / 2,
+        (canvas.height - img.height * s) / 2,
+        img.width * s, img.height * s);
+    }
+
+    function update() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? scrollY / max : 0;
+    draw(Math.min(usable - 1, Math.max(0, Math.floor(p * usable))));
+}
+
+    function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    update();
+    }
+
+    addEventListener('scroll', () => requestAnimationFrame(update));
+    addEventListener('resize', resize);
+    imgs[0].onload = resize;
+
+</script>
+
+
+<script>
+
+const mv = document.querySelector('model-viewer');
+
+function look(clientX, clientY) {
+  const x = -(clientX / innerWidth - 0.5) * 60;
+  const y = 75 - (clientY / innerHeight - 0.5) * 20;
+  mv.cameraOrbit = `${x}deg ${y}deg 150%`;
+}
+
+document.addEventListener('mousemove', e => look(e.clientX, e.clientY));
+document.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  look(t.clientX, t.clientY);
+}, { passive: true });
+</script>
+</body>
+</html>
